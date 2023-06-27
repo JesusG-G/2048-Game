@@ -56,16 +56,78 @@ def get_current_state(matriz):
                     status = 'GAMES NOT OVER' 
     return status
 
+#We compress the grid to swipe to the left
+def compress_the_grid(matriz):
+    is_changed = False
+    new_matrix = [[0]*4 for _ in range(4)]
+    for i in range(4):
+        previus_position = 0
+        for j in range(4):
+            if(matriz[i][j] !=0):
+                new_matrix[i][previus_position] = matriz[i][j]
+                if(j!=previus_position):
+                    is_changed = True
+                previus_position += 1
+    return new_matrix,is_changed
+
+#Merge the values of the grid in the case they are equal
+def merge_values(matriz):
+    is_changed = False
+    for i in range(4):
+        for j in range(3):
+            if matriz[i][j+1] == matriz[i][j] and matriz[i][j] != 0:
+                matriz[i][j] = matriz[i][j] * 2
+                matriz[i][j+1] = 0
+                is_changed = True
+
+    return matriz, is_changed
+#functions to  control the matrix and return a new matrix
+def reverse_matrix(matriz):
+    new_matriz = [list(reversed(matriz[i])) for i in range(4)]
+    return new_matriz
+
+def tranpose_matrix(matriz):
+    new_matrix = [[matriz[j][i] for j in range(len(matriz))] for i in range(len(matriz[0]))]
+    return new_matrix
 
 #Function depending the command
-def command_up(matriz):
-    print("comando arriba")
-
-def command_down(matriz):
-    print("comando abajo")
-
+#For the left command
+#1. Compress the grid
+#2.Merge the value
+#3. Compress Again
 def command_left(matriz):
-    print("comando izquierda")
+    new_grid, is_changed_1 = compress_the_grid(matriz)
+    new_grid, is_changed_2 = merge_values(new_grid)
+    is_changed = is_changed_1 or is_changed_2
+    new_grid, temp = compress_the_grid(new_grid)
+    return new_grid, is_changed
 
+#For the rigth command
+#1.Reverse the grid
+#2. we call the command left
+#3. Reverse the grid Again
 def command_rigth(matriz):
-    print("comando derecha")
+    new_grid = reverse_matrix(matriz)
+    new_grid,is_changed = command_left(new_grid)
+    new_grid = reverse_matrix(new_grid)
+    return new_grid, is_changed
+
+#For the up command
+#1. Transpose the grid
+#2. we call the command left
+#3. Tranpose the grid Again
+def command_up(matriz):
+    new_grid = tranpose_matrix(matriz)
+    new_grid, is_changed = command_left(new_grid)
+    new_grid = tranpose_matrix(new_grid)
+    return new_grid,is_changed
+
+#For the up command
+#1. Transpose the grid
+#2. we call the command rigth
+#3. Tranpose the grid Again
+def command_down(matriz):
+    new_grid = tranpose_matrix(matriz)
+    new_grid, is_changed = command_rigth(new_grid)
+    new_grid = tranpose_matrix(new_grid)
+    return new_grid, is_changed
