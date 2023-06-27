@@ -2,32 +2,44 @@ import logic
 
 if __name__ == "__main__":
     matriz = logic.start_game()
-    print(matriz)
+    for i in range(4):
+        print(matriz[i])
     while True:
-        print("Please introduce your command:")
+        print("Choose an option:")
         command = input(">>").upper()
         match command:
             case 'W':
-                print("Up")
+                print("UP")
+                matriz, flag = logic.command_up(matriz)
                 status = logic.get_current_state(matriz)
-                print(status)
-                logic.command_up(matriz)
+                if status=="GAMES NOT OVER":
+                    logic.add_new_2(matriz)
+                for i in range(4):
+                    print(matriz[i])
             case 'S':
-                print("Down")
+                print("DOWN")
+                matriz, flag = logic.command_down(matriz)
                 status = logic.get_current_state(matriz)
-                print(status)
-                logic.command_down(matriz)
+                if status=="GAMES NOT OVER":
+                    logic.add_new_2(matriz)
+                for i in range(4):
+                    print(matriz[i])
             case 'A':
-                print("Left")
+                print("LEFT")
+                matriz, flag = logic.command_left(matriz)
                 status = logic.get_current_state(matriz)
-                print(status)
-                logic.command_left(matriz)
+                if status=="GAMES NOT OVER":
+                    logic.add_new_2(matriz)
+                for i in range(4):
+                    print(matriz[i])
             case 'D':
-                print("Rigth")
+                print("RIGHT")
+                matriz, flag = logic.command_rigth(matriz)
                 status = logic.get_current_state(matriz)
-                print(status)
-                logic.command_rigth(matriz)
+                if status=="GAMES NOT OVER":
+                    logic.add_new_2(matriz)
+                for i in range(4):
+                    print(matriz[i])
             case _:
-                print("Introduce a valid command")
-            
+                print("Invalid command")
     
